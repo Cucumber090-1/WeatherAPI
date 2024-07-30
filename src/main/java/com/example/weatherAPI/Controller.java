@@ -1,8 +1,6 @@
 package com.example.weatherAPI;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 
@@ -19,6 +17,13 @@ public class Controller {
     @GetMapping("/get-cities")
     public String getCities(){
         return cities.toString();
+    }
+
+    @PostMapping("/add-city")
+    public City addCity(@RequestBody City city){
+        cities.add(city.getName());
+        System.out.println("Город " + city.getName() + " успешно добавлен!");
+        return city;
     }
 
 }

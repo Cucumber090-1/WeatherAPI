@@ -2,8 +2,8 @@ package com.example.weatherAPI;
 
 public class City {
 
-    private int lat;
-    private int lon;
+    private double lat;
+    private double lon;
     private String name;
 
     public City(String name, int lat, int lon) {
@@ -19,4 +19,21 @@ public class City {
     public void setName(String name){
         this.name = name;
     }
+
+    public double getLat(){
+        return this.lat;
+    }
+
+    public void setLat(double lat){
+        this.lat = lat;
+    }
+
+    public double getLon(){
+        return this.lon;
+    }
+
+    public void setLon(double lon){
+        this.lon = lon;
+    }
+
 }

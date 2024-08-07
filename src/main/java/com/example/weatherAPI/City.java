@@ -6,6 +6,7 @@ public class City {
     private double lon;
     private String name;
 
+    // init
     public City(String name, int lat, int lon) {
         this.name = name;
         this.lat = lat;

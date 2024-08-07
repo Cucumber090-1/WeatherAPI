@@ -10,8 +10,9 @@ import java.util.ArrayList;
 public class Controller {
 
     public ArrayList<City> cities = new ArrayList<>();
-    Dotenv dotenv = Dotenv.load();
-    String app_id = dotenv.get("APP_ID");
+    private Dotenv dotenv = Dotenv.load();
+    private String app_id = dotenv.get("APP_ID");
+    private final String patternURL = "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s";
 
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
@@ -44,7 +45,7 @@ public class Controller {
         RestTemplate restTemplate = new RestTemplate();
         City city = cities.get(id);
         System.out.println(app_id);
-        String URL = String.format("https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s", city.getLat(), city.getLon(), app_id);
+        String URL = String.format(patternURL, city.getLat(), city.getLon(), app_id);
         String result = restTemplate.getForObject(URL, String.class);
         return result;
     }

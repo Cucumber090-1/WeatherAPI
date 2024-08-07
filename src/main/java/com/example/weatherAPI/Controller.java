@@ -1,15 +1,17 @@
 package com.example.weatherAPI;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 @RestController
 public class Controller {
 
     public ArrayList<City> cities = new ArrayList<>();
+    Dotenv dotenv = Dotenv.load();
+    String app_id = dotenv.get("APP_ID");
 
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
@@ -17,12 +19,12 @@ public class Controller {
     }
 
     @GetMapping("/get-cities")
-    public String getCities(){
+    public ArrayList getCities(){
         String citiesStr = "";
         for (int i = 0; i < cities.size(); i++){
             citiesStr += cities.get(i).getName() + " ";
         }
-        return citiesStr;
+        return cities;
     }
 
     @PostMapping("/add-city")
@@ -41,9 +43,9 @@ public class Controller {
     public String getCityByID(@RequestParam(value = "id", defaultValue = "0") int id){
         RestTemplate restTemplate = new RestTemplate();
         City city = cities.get(id);
-        String resURL = String.format("https://api.openweathermap.org/data/2.5/weather?" +
-                "lat=%f&lon=%f&appid=1c4dca6d2814215616c0da78bc4d02e3", city.getLat(), city.getLon());
-        String result = restTemplate.getForObject(resURL, String.class);
+        System.out.println(app_id);
+        String URL = String.format("https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s", city.getLat(), city.getLon(), app_id);
+        String result = restTemplate.getForObject(URL, String.class);
         return result;
     }
 

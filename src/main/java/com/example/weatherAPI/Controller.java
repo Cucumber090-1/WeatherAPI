@@ -38,13 +38,20 @@ public class Controller {
     // additing a city to array handle POST
     @PostMapping("/add-city")
     public String addCity(@RequestBody City city){
-        if (cities.contains(city)){
-            return "Error: city already exists";
+        if (city != null && city.getName() != null && city.getLat() >= -90 && city.getLat() <= 90
+                && city.getLon() >= -180 && city.getLon() <= 180){
+            try {
+                cities.add(city);
+                System.out.println(city.getName() + " city successfully added");
+                return "Success";
+            }
+            catch (Exception e){
+                System.err.println("Error while adding city: " + e.getMessage());
+                return "Error while adding city";
+            }
         }
         else{
-            cities.add(city);
-            System.out.println("Город " + city.getName() + " успешно добавлен!");
-            return "";
+            return "Error: Invalid city data";
         }
     }
 

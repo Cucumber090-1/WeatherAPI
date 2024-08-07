@@ -2,9 +2,9 @@ package com.example.weatherAPI;
 
 public class City {
 
+    private String name;
     private double lat;
     private double lon;
-    private String name;
 
     // init
     public City(String name, int lat, int lon) {

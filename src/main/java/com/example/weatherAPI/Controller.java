@@ -28,10 +28,6 @@ public class Controller {
     // get all saved cities data handle GET
     @GetMapping("/get-cities")
     public ArrayList getCities(){
-        String citiesStr = "";
-        for (int i = 0; i < cities.size(); i++){
-            citiesStr += cities.get(i).getName() + " ";
-        }
         return cities;
     }
 
@@ -58,15 +54,20 @@ public class Controller {
     // get weather data from the curtain city by its ID, GET
     @GetMapping("get-city-by-id")
     public String getCityByID(@RequestParam(value = "id", defaultValue = "0") int id){
-        RestTemplate restTemplate = new RestTemplate();
-        City city = cities.get(id);
+        if (cities.isEmpty()){
+            return "Error: list is empty";
+        }
+        else{
+            RestTemplate restTemplate = new RestTemplate();
+            City city = cities.get(id);
 
-        // make URL using URL pattern
-        String URL = String.format(patternURL, city.getLat(), city.getLon(), app_id);
+            // make URL using URL pattern
+            String URL = String.format(patternURL, city.getLat(), city.getLon(), app_id);
 
-        // make request and save data to result
-        String result = restTemplate.getForObject(URL, String.class);
-        return result;
+            // make request and save data to result
+            String result = restTemplate.getForObject(URL, String.class);
+            return result;
+        }
     }
 
 }

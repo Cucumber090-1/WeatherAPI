@@ -5,12 +5,14 @@ public class City {
     private String name;
     private double lat;
     private double lon;
+    private int id;
 
     // init
-    public City(String name, int lat, int lon) {
+    public City(String name, double lat, double lon, int id) {
         this.name = name;
         this.lat = lat;
         this.lon = lon;
+        this.id = id;
     }
 
     public String getName(){
@@ -37,4 +39,11 @@ public class City {
         this.lon = lon;
     }
 
+    public int getId(){
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

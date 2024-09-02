@@ -15,6 +15,7 @@ public class Controller {
     // init and get app_id from .env file
     private Dotenv dotenv = Dotenv.load();
     private String app_id = dotenv.get("APP_ID");
+    private int prevID = 0;
 
     // get url pattern
     private final String patternURL = "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s";
@@ -37,6 +38,7 @@ public class Controller {
         if (city != null && city.getName() != null && city.getLat() >= -90 && city.getLat() <= 90
                 && city.getLon() >= -180 && city.getLon() <= 180){
             try {
+                city.setId(prevID + 1);
                 cities.add(city);
                 System.out.println(city.getName() + " city successfully added");
                 return "Success";
@@ -53,13 +55,13 @@ public class Controller {
 
     // get weather data from the curtain city by its ID, GET
     @GetMapping("get-city-by-id")
-    public String getCityByID(@RequestParam(value = "id", defaultValue = "0") int id){
+    public String getCityByID(@RequestParam(value = "id", defaultValue = "1") int id){
         if (cities.isEmpty()){
             return "Error: list is empty";
         }
         else{
             RestTemplate restTemplate = new RestTemplate();
-            City city = cities.get(id);
+            City city = cities.get(id - 1);
 
             // make URL using URL pattern
             String URL = String.format(patternURL, city.getLat(), city.getLon(), app_id);

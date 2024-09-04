@@ -70,7 +70,8 @@ public class Controller {
     public String getCityByID(@RequestParam(value = "id", defaultValue = "1") int id){
         if (cities.isEmpty()){
             return "Error: list is empty";
-        }
+        } else if (id > cities.size())
+            return "This id is out of range";
         else{
             RestTemplate restTemplate = new RestTemplate();
             City city = cities.get(id);

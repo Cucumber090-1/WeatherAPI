@@ -4,13 +4,13 @@ import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 @RestController
 public class Controller {
 
     // init array for saving cities
-    public ArrayList<City> cities = new ArrayList<>();
+    public HashMap<Integer, City> cities = new HashMap<>();
 
     // init and get app_id from .env file
     private Dotenv dotenv = Dotenv.load();
@@ -28,18 +28,18 @@ public class Controller {
 
     // get all saved cities data handle GET
     @GetMapping("/get-cities")
-    public ArrayList getCities(){
+    public HashMap getCities(){
         return cities;
     }
 
     // additing a city to array handle POST
     @PostMapping("/add-city")
     public String addCity(@RequestBody City city){
-        if (city != null && city.getName() != null && city.getLat() >= -90 && city.getLat() <= 90
-                && city.getLon() >= -180 && city.getLon() <= 180){
+        if (!cities.containsValue(city)){
             try {
-                city.setId(prevID + 1);
-                cities.add(city);
+                prevID += 1;
+                city.setId(prevID);
+                cities.put(city.getId(), city);
                 System.out.println(city.getName() + " city successfully added");
                 return "Success";
             }
@@ -49,11 +49,12 @@ public class Controller {
             }
         }
         else{
-            return "Error: Invalid city data";
+            return "Error: city already exists";
         }
     }
 
     // get weather data from the curtain city by its ID, GET
+    // first city in HashMap saved as default id
     @GetMapping("get-city-by-id")
     public String getCityByID(@RequestParam(value = "id", defaultValue = "1") int id){
         if (cities.isEmpty()){
@@ -61,7 +62,7 @@ public class Controller {
         }
         else{
             RestTemplate restTemplate = new RestTemplate();
-            City city = cities.get(id - 1);
+            City city = cities.get(id);
 
             // make URL using URL pattern
             String URL = String.format(patternURL, city.getLat(), city.getLon(), app_id);

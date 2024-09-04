@@ -20,6 +20,17 @@ public class Controller {
     // get url pattern
     private final String patternURL = "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s";
 
+    private boolean isContains(City city){
+        if (city != null){
+            for(int i = 1; i <= cities.size(); i++){
+                if (city.getLon() == cities.get(i).getLon() &&
+                        city.getLat() == cities.get(i).getLat()) return true;
+                else return false;
+            }
+        }
+        return false;
+    }
+
     // test GET handle, returns hello
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
@@ -35,7 +46,7 @@ public class Controller {
     // additing a city to array handle POST
     @PostMapping("/add-city")
     public String addCity(@RequestBody City city){
-        if (!cities.containsValue(city)){
+        if (!isContains(city)){
             try {
                 prevID += 1;
                 city.setId(prevID);
